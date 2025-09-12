@@ -1,7 +1,7 @@
-CREATE TABLE users(
-id INT PRIMARY,
-username VARCHAR(50),
-balance INT
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR(50),
+    balance INT
 );
 
 INSERT INTO users VALUES(1, "HARSHIT", 5000), (2, "HARRY", 2000), (3, "Raj", 7000);
