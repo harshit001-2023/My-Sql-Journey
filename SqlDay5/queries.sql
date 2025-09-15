@@ -13,19 +13,22 @@ CREATE TABLE orders (
 
 INSERT INTO users VALUES (1, 'Harshit', 8000);
 INSERT INTO users VALUES (3, 'Anita', 9000);
-INSERT INTO users VALUES (4, 'Priya', 6000); -- New user with no orders
+INSERT INTO users VALUES (4, 'Priya', 6000);
 
 INSERT INTO orders VALUES (1, 'Keyboard', 1500, 3);
 INSERT INTO orders VALUES (2, 'Mouse', 1000, 3);
 INSERT INTO orders VALUES (3, 'Monitor', 8000, 1);
 
-SELECT users.username, orders.item
+SELECT username
 FROM users
-LEFT JOIN orders ON users.id = orders.user_id;
+WHERE id IN (SELECT user_id FROM orders WHERE item = 'Keyboard');
 
-SELECT users.username, SUM(orders.amount) AS total_spent
-FROM users
-JOIN orders ON users.id = orders.user_id
-GROUP BY users.username
-HAVING total_spent > 5000;
-
+SELECT
+    username,
+    balance,
+    CASE
+        WHEN balance > 8500 THEN 'High Spender'
+        WHEN balance > 7000 THEN 'Mid Spender'
+        ELSE 'Low Spender'
+    END AS spending_tier
+FROM users;
