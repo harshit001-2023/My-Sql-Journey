@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+  <style>
+    .bg { fill: #0f172a; }
+    .title { fill: #bfdbfe; font-family: Inter, Arial, sans-serif; font-size:20px; font-weight:700 }
+    .meta { fill: #94a3b8; font-family: Inter, Arial, sans-serif; font-size:12px }
+    .file { fill: #e6eef8; font-family: Inter, Arial, sans-serif; font-size:12px }
+    .folder { fill: #fef3c7; font-family: Inter, Arial, sans-serif; font-size:12px }
+    .note { fill: #7dd3fc; font-family: Inter, Arial, sans-serif; font-size:12px }
+  </style>
+
+  <rect class="bg" width="100%" height="100%" rx="8"/>
+  <text x="28" y="40" class="title">Repository structure: harshit001-2023/My-Sql-Journey</text>
+  <text x="28" y="62" class="meta">This SVG fetches the repository tree from the GitHub API and renders a simple directory tree.</text>
+  <g id="tree" transform="translate(20,100)"></g>
+
+  <script><![CDATA[
+    (function(){
+      const owner = 'harshit001-2023';
+      const repo = 'My-Sql-Journey';
+      const g = document.getElementById('tree');
+      const api = `https://api.github.com/repos/${owner}/${repo}/git/trees/HEAD?recursive=1`;
+
+      function makeNodeMap(paths){
+        const root = { name: '', children: {}, type: 'tree' };
+        for(const item of paths){
+          const parts = item.path.split('/');
+          let cur = root;
+          for(let i=0;i<parts.length;i++){
+            const p = parts[i];
+            if(i===parts.length-1){
+              // leaf
+              cur.children[p] = cur.children[p] || { name: p, type: item.type, children: {} };
+            } else {
+              cur.children[parts[i]] = cur.children[parts[i]] || { name: p, type: 'tree', children: {} };
+              cur = cur.children[parts[i]];
+            }
+          }
+        }
+        return root;
+      }
+
+      function flatten(node, depth=0, out=[]){
+        const keys = Object.keys(node.children).sort((a,b)=>{
+          const A = node.children[a], B = node.children[b];
+          if(A.type===B.type) return a.localeCompare(b);
+          return A.type==='tree' ? -1 : 1;
+        });
+        for(const k of keys){
+          const child = node.children[k];
+          out.push({ name: child.name, type: child.type, depth });
+          if(child.type==='tree') flatten(child, depth+1, out);
+        }
+        return out;
+      }
+
+      function render(list){
+        // clear
+        while(g.firstChild) g.removeChild(g.firstChild);
+        const lineHeight = 18;
+        let y = 0;
+        for(const item of list){
+          const x = item.depth * 16;
+          const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+          txt.setAttribute('x', x);
+          txt.setAttribute('y', y + lineHeight);
+          txt.setAttribute('class', item.type==='tree' ? 'folder' : 'file');
+          txt.textContent = (item.type==='tree' ? '📁 ' : '📄 ') + item.name;
+          g.appendChild(txt);
+          y += lineHeight;
+        }
+        // resize svg height if necessary
+        try{ const svg = document.querySelector('svg'); svg.setAttribute('height', Math.max(1600, y+140)); }catch(e){}
+      }
+
+      function showError(msg){
+        while(g.firstChild) g.removeChild(g.firstChild);
+        const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+        t.setAttribute('x', 0); t.setAttribute('y', 0); t.setAttribute('class','note');
+        t.textContent = 'Error: ' + msg + ' — fallback: show top-level only (if available).';
+        g.appendChild(t);
+      }
+
+      fetch(api).then(r=>{
+        if(!r.ok) throw new Error('GitHub API returned ' + r.status + ' ' + r.statusText);
+        return r.json();
+      }).then(data=>{
+        if(!data.tree) throw new Error('No tree in API response');
+        const root = makeNodeMap(data.tree);
+        const list = flatten(root);
+        render(list);
+      }).catch(err=>{
+        console.error(err);
+        showError(err.message);
+      });
+    })();
+  ]]></script>
+</svg>
