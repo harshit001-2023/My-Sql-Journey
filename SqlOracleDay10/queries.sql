@@ -23,7 +23,7 @@ INSERT INTO ITEM VALUES (8, 'Saree', 'Black', NULL, 1300, '18-SEP-2024');
 COMMIT;
 
 
-// Operator Task
+// Operator Task ----------------------------------------------------------------------------------
 -- 1. Display itemname,color and price of items whose price is more than 800
 SELECT item_name, color, price FROM item WHERE price > 800;
 
@@ -62,3 +62,5 @@ WHERE item_name IN ('Shirt', 'Pant')
   AND price BETWEEN 500 AND 800
   AND EXTRACT(YEAR FROM purchased_date) = 2025
   AND color NOT IN ('Red', 'Black');
+
+
