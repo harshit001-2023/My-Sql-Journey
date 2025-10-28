@@ -64,3 +64,56 @@ WHERE item_name IN ('Shirt', 'Pant')
   AND color NOT IN ('Red', 'Black');
 
 
+//DML Task --------------------------------------------------------------------------------------------
+-- 1. Set salary to 3500 for employee number 7934
+UPDATE emp1 SET sal = 3500 WHERE empno = 7934;
+
+-- 2. Set job to MANAGER & increase 2000 rupees to employee number 7369
+UPDATE emp1 SET job = 'MANAGER', sal = sal + 2000 WHERE empno = 7369;
+
+-- 3. Increase salary by 20% for MANAGERS
+UPDATE emp1 SET sal = sal * 1.20 WHERE job = 'MANAGER';
+
+-- 4. Increase salary by 1000 rupees for all employees
+UPDATE emp1 SET sal = sal + 1000;
+
+-- 5. Increase 20% on salary, 15% on commission for employees getting commission
+UPDATE emp1 SET sal = sal * 1.20, comm = comm * 1.15 WHERE comm IS NOT NULL;
+
+-- 6. Set commission to 800 for employees not getting commission
+UPDATE emp1 SET comm = 800 WHERE comm IS NULL OR comm = 0;
+
+-- 7. Set comm to null for empno 7521,7698,7900
+UPDATE emp1 SET comm = NULL WHERE empno IN (7521,7698,7900);
+
+-- 8. Update salary to 12000 where current salary is 5000
+UPDATE emp1 SET sal = 12000 WHERE sal = 5000;
+
+-- 9. Increase 10% on salary who joined in 1982
+UPDATE emp1 SET sal = sal * 1.10 WHERE EXTRACT(YEAR FROM hiredate) = 1982;
+
+-- 10. Increase 20% on salary who have more than 42 years of experience
+UPDATE emp1 SET sal = sal * 1.20 WHERE MONTHS_BETWEEN(SYSDATE, hiredate) >= 504;
+
+-- 11. Increase 15% on salary whose annual salary is more than 30000
+UPDATE emp1 SET sal = sal * 1.15 WHERE sal > 2500;
+
+-- 12. Increase 20% on salary for employee whose name starts with 'A' and ends with 'S'
+UPDATE emp1 SET sal = sal * 1.20 WHERE ename LIKE 'A%S';
+
+-- 13. Delete employee record with employee number 7900
+DELETE FROM emp1 WHERE empno = 7900;
+
+-- 14. Delete employee records with experience more than 43 years
+DELETE FROM emp1 WHERE MONTHS_BETWEEN(SYSDATE, hiredate) > 516;
+
+-- 15. Delete all managers records
+DELETE FROM emp1 WHERE job = 'MANAGER';
+
+-- 16. Delete all 10, 30 department records
+DELETE FROM emp1 WHERE deptno IN (10,30);
+
+-- 17. Delete all records and rollback
+DELETE FROM emp1;
+ROLLBACK;
+
