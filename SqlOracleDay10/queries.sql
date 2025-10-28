@@ -117,3 +117,13 @@ DELETE FROM emp1 WHERE deptno IN (10,30);
 DELETE FROM emp1;
 ROLLBACK;
 
+//Verification Task-------------------------------------------------------------------------------------
+-- Check EMP1 table
+SELECT * FROM emp1;
+
+-- Check ITEM table
+SELECT * FROM item;
+
+-- Check specific updates
+SELECT empno, ename, job, sal, comm FROM emp1 WHERE empno IN (7369, 7934);
+SELECT item_name, color, price FROM item WHERE price > 800;
