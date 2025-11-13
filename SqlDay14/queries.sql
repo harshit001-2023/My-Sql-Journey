@@ -1,0 +1,6 @@
+
+
+SELECT e.EMPNO, e.ENAME, e.JOB, e.SAL, e.DEPTNO
+FROM emp e
+JOIN emp m ON e.MGR = m.EMPNO
+WHERE m.ENAME = 'BLAKE';
