@@ -22,3 +22,15 @@ WHEN 'SALESMAN' THEN SAL * 0.2
 WHEN 'MANAGER' THEN SAL * 0.3
 ELSE SAL*.05 END;
 
+--3.Write a query to display employee’s name, salary based on the following conditions:
+--• If the salary is less than 1000, display 'Low salary'.
+--• If the salary is between 1000 and 3000 , display 'Medium salary'.
+--• If the salary is 3100,3500,5000, display 'Special salary'.
+--• For all other salaries, display 'Other salary'.
+
+SQL> SELECT ENAME, SAL,
+  2  CASE
+  3  WHEN SAL < 1000 THEN 'LOW SALARY'
+  4  WHEN SAL < 3000 AND SAL >1000 THEN 'MEDIUM SALARY'
+  5  WHEN SAL = 3100 OR SAL = 3500 OR SAL = 5000 THEN 'SPECIAL SALARY'
+  6  ELSE 'OTHER SALARY' END FROM EMP;
