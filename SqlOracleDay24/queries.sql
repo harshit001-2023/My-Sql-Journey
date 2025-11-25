@@ -40,5 +40,43 @@ SELECT * FROM (
     FROM EMP)
     WHERE MOD(R, 2) = 0;
 
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM AS R
+    FROM EMP)
+    WHERE R IN(1, 14);
 
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM AS R
+    FROM EMP)
+    WHERE R = 1 OR R = (SELECT COUNT(*) FROM EMP);
 
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM AS R
+    FROM EMP)
+    WHERE R >=3;
+
+select * from emp
+    where sal IN (
+        select max(sal)
+        from emp
+        group by deptno);
+
+select * from emp
+    where
+    deptno>all(10,20);
+
+  SELECT * FROM EMP
+    WHERE ENAME IN ('SMITH', 'BLAKE');
+
+  SELECT * FROM EMP
+    WHERE JOB > ANY('SMITH', 'BLAKE');
+
+  SELECT * FROM EMP
+    WHERE SAL > ALL(
+        SELECT SAL FROM EMP
+        WHERE JOB = 'MANAGER');
+
+  SELECT * FROM EMP666
+    WHERE GENDER = 'M' AND SAL > ALL(
+        SELECT SAL FROM EMP666
+        WHERE GENDER = 'F');
