@@ -15,3 +15,30 @@ SELECT * FROM (
     SELECT * FROM EMP
         ORDER BY EMPNO DESC)
     WHERE ROWNUM <= 2;
+
+select * from (
+    select rownum r,ename,sal from emp)
+where r=2;
+
+SELECT * FROM (
+    SELECT EMPNO, ENAME,SAL, JOB, ROWNUM R
+        FROM EMP)
+    WHERE R BETWEEN 4 AND 8;
+
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM R
+        FROM EMP)
+    WHERE R IN(2, 3, 5, 6, 10);
+
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM R
+    FROM EMP)
+    WHERE R= MOD(R, 2);
+
+SELECT * FROM (
+    SELECT EMPNO, ENAME, JOB, SAL, ROWNUM AS R
+    FROM EMP)
+    WHERE MOD(R, 2) = 0;
+
+
+
